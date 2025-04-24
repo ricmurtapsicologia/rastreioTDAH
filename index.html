@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Metadados essenciais -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EIR-TDAH-A – Escala Integrada de Rastreio para TDAH</title>
+  <meta name="description" content="Formulário clínico autoaplicável para rastreio de TDAH em adultos, baseado em DSM-5-TR e CID-11.">
+  <link rel="icon" href="https://i.pinimg.com/736x/ea/e6/9b/eae69b98b402095e5acd1a817bb6e1ad.jpg" type="image/jpeg">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="EIR-TDAH-A">
+  <meta property="og:title" content="EIR-TDAH-A: Rastreio de TDAH em Adultos">
+  <meta property="og:description" content="Escala clínica autoaplicável de TDAH adulto baseada em DSM-5-TR e CID-11.">
+  <meta property="og:image" content="https://i.pinimg.com/736x/71/aa/45/71aa4521b8d705e58939e65aa8e73bc2.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Estilos principais -->
+  <style>
+  :root {
+    --light-bg: #f4f4f9;
+    --dark-bg: #1f1f1f;
+    --mid-bg: #2b2b2b;
+    --accent: #c8a165;
+    --text: #333333;
+    --text-light: #ffffff;
+
+    /* Cor do botão WhatsApp corrigida: */
+    --whatsapp: #25D366;
+
+    --error-bg: #ffebeb;
+    --error-border: #ff4d4f;
+    --gap: 1rem;
+    --radius: 0.5rem;
+    --transition: 0.4s;
+  }
+
+  /* Reset básico e box-model */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--light-bg);
+    color: var(--text);
+    overflow-x: hidden;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  /* Dark mode */
+  body.dark {
+    background: var(--dark-bg);
+    color: var(--text-light);
+  }
+
+  /* Toggle dark mode */
+  #darkModeToggle {
+    position: fixed; top: var(--gap); right: var(--gap);
+    font-size: 1.5rem;
+    background: none; border: none; cursor: pointer;
+    color: var(--text);
+    transition: color var(--transition);
+    z-index: 1001;
+  }
+  body.dark #darkModeToggle {
+    color: var(--text-light);
+  }
+
+  /* Splash screen */
+  #splash {
+    position: fixed; inset: 0;
+    background: var(--accent);
+    color: var(--text-light);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: var(--gap); text-align: center;
+    z-index: 1000;
+    transition: opacity var(--transition), visibility var(--transition);
+  }
+  #splash.hidden {
+    opacity: 0; visibility: hidden;
+  }
+
+  /* Container principal */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 var(--gap);
+    opacity: 0;
+    transform: translateY(10%);
+    transition: opacity var(--transition), transform var(--transition);
+  }
+  .container.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Introdução */
+  .intro {
+    background: var(--mid-bg);
+    color: var(--text-light);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin: var(--gap) 0;
+    text-align: justify;
+    transition: background var(--transition), color var(--transition);
+  }
+  .intro h2 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Campos de entrada */
+  .field {
+    margin-bottom: var(--gap);
+  }
+  .field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .field input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    transition: border-color var(--transition);
+  }
+
+  /* Blocos de perguntas */
+  .block {
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: var(--gap);
+    margin-bottom: var(--gap);
+  }
+  .block h3 {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .question {
+    margin-bottom: 0.75rem;
+  }
+  /* Destacar não respondidas */
+  .question.unanswered {
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+  }
+  .options {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .options label {
+    display: flex; align-items: center; gap: 0.25rem;
+    font-size: 0.9rem;
+  }
+
+  /* Botões */
+  .actions {
+    text-align: center;
+    margin: var(--gap) 0;
+  }
+  .actions button {
+    background: var(--accent);
+    color: var(--text-light);
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: transform var(--transition);
+  }
+  .actions button:hover {
+    transform: scale(1.05);
+  }
+
+  /* Cards de resultado */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--gap);
+    margin-bottom: var(--gap);
+  }
+  .card {
+    background: var(--text-light);
+    padding: var(--gap);
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  body.dark .card {
+    background: #222;
+    color: var(--text-light);
+  }
+  .thermometer {
+    position: relative;
+    width: 30px;
+    height: 140px;
+    background: #eee;
+    border-radius: 15px;
+    margin: 0 auto 0.5rem;
+    overflow: hidden;
+  }
+  .thermometer-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background: var(--accent);
+    transition: height 1s var(--transition);
+  }
+  .thermometer-text {
+    font-size: 0.85rem;
+  }
+
+  /* Botão “Enviar ao Psicólogo” */
+  .send-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--whatsapp);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform var(--transition);
+  }
+  .send-whatsapp:hover {
+    transform: scale(1.05);
+  }
+
+  /* Rodapé */
+  footer {
+    text-align: center;
+    padding: var(--gap) 0;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+</style>
+
+</head>
+<body>
+  <!-- Dark Mode Toggle -->
+  <header>
+    <button id="darkModeToggle" aria-label="Alternar modo noturno">🌙</button>
+  </header>
+
+  <!-- Splash Screen -->
+  <div id="splash">
+    <h2>Bem-vindo ao EIR-TDAH-A</h2>
+    <p>Carregando avaliação...</p>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <main id="mainContent" class="container">
+    <!-- Introdução -->
+    <section class="intro">
+      <h2>Saudações!</h2>
+      <p>Este formulário de autorrelato avalia sintomas de TDAH em adultos, baseado em critérios do DSM-5-TR e CID-11. Leia cada afirmação e selecione a resposta que melhor descreve sua experiência nos últimos 6 meses.</p>
+    </section>
+
+    <!-- Formulário -->
+    <form id="form">
+      <div class="field">
+        <label for="name">Nome Completo</label>
+        <input type="text" id="name" required>
+      </div>
+      <div class="field">
+        <label for="date">Data</label>
+        <input type="date" id="date" required>
+      </div>
+
+      <!-- Blocos de Perguntas -->
+      <section class="block" id="block1">
+        <h3>1. Desatenção Atual</h3>
+        <div id="q1"></div>
+      </section>
+      <section class="block" id="block2">
+        <h3>2. Hiperatividade e Impulsividade</h3>
+        <div id="q2"></div>
+      </section>
+      <section class="block" id="block3">
+        <h3>3. Desregulação Emocional</h3>
+        <div id="q3"></div>
+      </section>
+      <section class="block" id="block4">
+        <h3>4. Funções Executivas</h3>
+        <div id="q4"></div>
+      </section>
+      <section class="block" id="block5">
+        <h3>5. Impacto Funcional</h3>
+        <div id="q5"></div>
+      </section>
+      <section class="block" id="block6">
+        <h3>6. Retroatividade Infantil</h3>
+        <div id="q6"></div>
+      </section>
+      <section class="block" id="block7">
+        <h3>7. Diagnóstico Diferencial</h3>
+        <div id="q7"></div>
+      </section>
+      <section class="block" id="block8">
+        <h3>8. Autorregulação e Comportamentos Gerais</h3>
+        <div id="q8"></div>
+      </section>
+
+      <!-- Botão Corrigir -->
+      <div class="actions">
+        <button type="button" id="submit">Corrigir</button>
+      </div>
+    </form>
+
+    <!-- Resultados e Envio -->
+    <section id="results" style="display: none;">
+      <h2>Resultados</h2>
+      <div id="summary" role="alert"></div>
+      <div class="cards">
+        <div class="card"><h4>Desatenção</h4><div class="thermometer"><div id="f1" class="thermometer-fill"></div></div><div id="t1" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Hiper/Impulso</h4><div class="thermometer"><div id="f2" class="thermometer-fill"></div></div><div id="t2" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Desregulação</h4><div class="thermometer"><div id="f3" class="thermometer-fill"></div></div><div id="t3" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Executiva</h4><div class="thermometer"><div id="f4" class="thermometer-fill"></div></div><div id="t4" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Impacto</h4><div class="thermometer"><div id="f5" class="thermometer-fill"></div></div><div id="t5" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Infância</h4><div class="thermometer"><div id="f6" class="thermometer-fill"></div></div><div id="t6" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Diferencial</h4><div class="thermometer"><div id="f7" class="thermometer-fill"></div></div><div id="t7" class="thermometer-text">0%</div></div>
+        <div class="card"><h4>Autorregulação</h4><div class="thermometer"><div id="f8" class="thermometer-fill"></div></div><div id="t8" class="thermometer-text">0%</div></div>
+      </div>
+
+      <!-- Botão Enviar Resultado ao Psicólogo -->
+      <div style="text-align: center;">
+        <button class="send-whatsapp" id="send"><i class="fab fa-whatsapp"></i> Enviar Resultado ao Psicólogo</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé -->
+  <footer>© 2025 Richelmy Murta — Psicólogo Clínico</footer>
+
+  <!-- Lógica JavaScript ES6+ -->
+  <script>
+    // 1) Dados das questões por bloco
+    const questions = {
+      q1: [
+        "Tenho dificuldade em manter o foco em conversas longas.",
+        "Frequentemente cometo erros por descuido.",
+        "Tenho dificuldade em manter a atenção em leituras ou vídeos.",
+        "Perco objetos importantes como carteira, celular ou chaves.",
+        "Esqueço facilmente compromissos e datas.",
+        "Evito tarefas que exigem esforço mental prolongado.",
+        "Me distraio com estímulos irrelevantes ao realizar tarefas.",
+        "Tenho dificuldade em organizar compromissos e atividades.",
+        "Sinto que meu pensamento é confuso ou fragmentado.",
+        "Esqueço o que ia fazer logo após me levantar ou mudar de ambiente.",
+        "Frequentemente preciso reler parágrafos para entender o conteúdo.",
+        "Costumo começar tarefas e abandonar antes de terminar."
+      ],
+      q2: [
+        "Tenho dificuldade em permanecer sentado por longos períodos.",
+        "Mexo mãos ou pés mesmo sem perceber.",
+        "Falo demais mesmo quando não é apropriado.",
+        "Interrompo os outros frequentemente.",
+        "Respondo perguntas antes que sejam finalizadas.",
+        "Tenho comportamentos impulsivos que causam problemas.",
+        "Tomo decisões sem pensar nas consequências.",
+        "Sinto uma inquietação interna constante.",
+        "Tenho necessidade de mudar de posição repetidamente.",
+        "Me levanto em situações em que deveria estar sentado.",
+        "Termino frases de outras pessoas.",
+        "Faço compras, apostas ou ações impulsivas que depois me arrependem."
+      ],
+      q3: [
+        "Tenho explosões emocionais desproporcionais.",
+        "Me frustro com facilidade.",
+        "Sinto variações bruscas de humor durante o dia.",
+        "Tenho dificuldade em me acalmar após uma situação estressante.",
+        "Reajo com irritação a pequenas contrariedades.",
+        "Me culpo intensamente por erros pequenos.",
+        "Tenho baixa tolerância à crítica.",
+        "Às vezes choro sem entender o motivo.",
+        "Me sinto emocionalmente esgotado com frequência.",
+        "Tenho dificuldade em controlar o impulso de confrontar os outros."
+      ],
+      q4: [
+        "Tenho dificuldade em planejar tarefas com várias etapas.",
+        "Não consigo cumprir prazos mesmo sabendo da importância.",
+        "Procrastino mesmo em tarefas simples.",
+        "Tenho dificuldade em organizar minha rotina diária.",
+        "Me atrapalho ao tentar fazer múltiplas tarefas ao mesmo tempo.",
+        "Perco a noção de tempo com frequência.",
+        "Me confundo com sequência de ações simples.",
+        "Tenho dificuldade em priorizar tarefas.",
+        "Me sinto sobrecarregado com pequenas demandas.",
+        "Adio decisões importantes por indecisão ou medo de errar.",
+        "Tenho dificuldade em seguir instruções verbais longas.",
+        "Sinto que tenho mais ideias do que consigo executar."
+      ],
+      q5: [
+        "Tenho prejuízo no trabalho por distração ou desorganização.",
+        "Me sinto inadequado em ambientes acadêmicos ou profissionais.",
+        "Meus relacionamentos são afetados por minha impulsividade.",
+        "Evito compromissos por medo de não conseguir cumpri-los.",
+        "Me sinto socialmente inadequado por meu comportamento.",
+        "Tenho dificuldades financeiras por desorganização.",
+        "Me envergonho de minhas falhas em tarefas simples.",
+        "Me sinto frustrado por não atingir meu potencial."
+      ],
+      q6: [
+        "Era descrito como inquieto(a) ou agitado(a) na infância.",
+        "Recebia muitas advertências por interromper ou não esperar a vez.",
+        "Tive dificuldade em manter atenção nas aulas.",
+        "Não conseguia terminar as tarefas escolares.",
+        "Era impulsivo(a) nas brincadeiras ou conflitos.",
+        "Tinha dificuldade em manter amizades por comportamento inadequado.",
+        "Mudava de assunto ou atividade com frequência.",
+        "Tive dificuldades com regras e limites.",
+        "Me sentia diferente dos outros colegas.",
+        "Era criticado por falta de foco ou agitação."
+      ],
+      q7: [
+        "Meus sintomas surgiram apenas na idade adulta.",
+        "Tenho oscilações intensas de humor (ex: euforia e apatia).",
+        "Tenho histórico de trauma que influencia meu comportamento atual.",
+        "Os sintomas pioram em momentos de estresse ou luto.",
+        "Sinto mudanças súbitas de energia e sono.",
+        "Já fui diagnosticado com transtorno bipolar, depressão ou ansiedade.",
+        "Os sintomas desaparecem quando estou em férias ou descansado.",
+        "Tenho crises de pânico ou episódios dissociativos.",
+        "Já tive episódios de compulsão (alimentar, compras, jogos, etc).",
+        "Meus sintomas não apareceram na infância ou adolescência."
+      ],
+      q8: [
+        "Consigo manter o foco em atividades longas sem me distrair.",
+        "Me considero organizado(a) e pontual.",
+        "Tenho facilidade em lidar com mudanças e imprevistos.",
+        "Sinto que consigo controlar minhas emoções com facilidade.",
+        "Meus colegas dizem que sou uma pessoa centrada e estável.",
+        "Me considero produtivo e eficiente na maioria das atividades.",
+        "Lido bem com tarefas complexas e de longo prazo.",
+        "Me destaco por minha habilidade de escutar sem interromper.",
+        "Reflito antes de tomar decisões importantes.",
+        "Me sinto emocionalmente equilibrado na maior parte do tempo.",
+        "Tenho clareza sobre minhas metas e prioridades diárias."
+      ]
+    };
+
+    const maxScores = [48, 48, 40, 48, 32, 40, 40, 44];
+    let lastScores = [];
+
+    // Popula o HTML com as questões
+    const render = () => {
+      Object.keys(questions).forEach((k, i) => {
+        const container = document.getElementById(k);
+        container.innerHTML = questions[k]
+          .map((q, j) => `
+            <div class="question">
+              <p>${j + 1}. ${q}</p>
+              <div class="options">
+                ${[0, 1, 2, 3, 4]
+                  .map(v => `<label><input required name="${k}_${j}" type="radio" value="${v}">${v}</label>`)
+                  .join('')}
+              </div>
+            </div>
+          `)
+          .join('');
+      });
+    };
+
+    // Níveis de severidade
+    const level = pct =>
+      pct < 34 ? ['green', 'Leve']
+        : pct < 67 ? ['orange', 'Moderado']
+        : ['red', 'Grave'];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const splash = document.getElementById('splash');
+      const main = document.getElementById('mainContent');
+
+      // Transição splash → conteúdo
+      setTimeout(() => {
+        splash.classList.add('hidden');
+        main.classList.add('show');
+      }, 2000);
+
+      render();
+
+      // Botão Corrigir
+      document.getElementById('submit').addEventListener('click', () => {
+        const form = document.getElementById('form');
+
+        // 1) Destaca pendentes
+        document.querySelectorAll('.question').forEach(q => {
+          const answered = q.querySelector('input[type="radio"]:checked');
+          q.classList.toggle('unanswered', !answered);
+        });
+
+        // 2) Foca no primeiro pendente
+        const firstPending = document.querySelector('.question.unanswered');
+        if (firstPending) {
+          firstPending.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          alert('Por favor, responda todas as questões faltantes (destacadas em vermelho).');
+          return;
+        }
+
+        // 3) Validação de fallback
+        if (!form.checkValidity()) {
+          alert('Por favor, responda todas as questões.');
+          return;
+        }
+
+        // 4) Cálculo de escores
+        const scores = Object.keys(questions).map((k, i) =>
+          questions[k].reduce((sum, _, j) => {
+            const val = Number(document.querySelector(`input[name="${k}_${j}"]:checked`).value);
+            return sum + (i === 7 ? 4 - val : val);
+          }, 0)
+        );
+        lastScores = scores;
+
+        // 5) Atualiza os termômetros
+        scores.forEach((s, i) => {
+          const pct = Math.round((s / maxScores[i]) * 100);
+          const [color, text] = level(pct);
+          document.getElementById(`f${i + 1}`).style.height = `${pct}%`;
+          document.getElementById(`f${i + 1}`).style.background = color;
+          document.getElementById(`t${i + 1}`).innerText = `${pct}% (${text})`;
+        });
+
+        // 6) Resumo clínico
+        const total = scores.reduce((a, b) => a + b, 0);
+        let summary = `Total: ${total} pts. `;
+        summary += total < 99
+          ? 'Baixa probabilidade de TDAH.'
+          : total < 149
+            ? 'Zona de atenção: aprofundar avaliação.'
+            : total < 218
+              ? 'Indicação significativa de TDAH.'
+              : 'Suspeita grave de TDAH.';
+        document.getElementById('summary').innerText = summary;
+
+        // Exibe resultados e botão de envio
+        document.getElementById('results').style.display = 'block';
+      });
+
+      // Botão Enviar ao Psicólogo
+      document.getElementById('send').addEventListener('click', () => {
+        if (!lastScores.length) {
+          alert('Por favor, corrija antes de enviar.');
+          return;
+        }
+        const name = document.getElementById('name').value.trim() || 'Paciente';
+        const date = document.getElementById('date').value || new Date().toLocaleDateString();
+        const labels = [
+          'Desatenção',
+          'Hiper/Impulso',
+          'Desregulação',
+          'Executiva',
+          'Impacto',
+          'Infância',
+          'Diferencial',
+          'Autorregulação'
+        ];
+        const lines = labels.map((lab, i) => `${lab}: ${Math.round((lastScores[i] / maxScores[i]) * 100)}%`);
+        const msg = encodeURIComponent(`Nome: ${name}\nData: ${date}\n${lines.join('\n')}`);
+        window.open(`https://wa.me/5535984640729?text=${msg}`, '_blank');
+      });
+
+      // Alterna Dark Mode
+      document.getElementById('darkModeToggle').addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+      });
+    });
+  </script>
+</body>
+</html>
