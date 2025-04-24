@@ -592,22 +592,43 @@
 		  });
 		
 		  // Enviar ao Psicólogo
-		  document.getElementById('send').addEventListener('click', () => {
-		    if (!lastScores.length) {
-		      return alert('Por favor, corrija antes de enviar.');
-		    }
-		    const name = document.getElementById('name').value.trim() || 'Paciente';
-		    const date = document.getElementById('date').value || new Date().toLocaleDateString();
-		    const labels = [
-		      'Desatenção','Hiper/Impulso','Desregulação','Executiva',
-		      'Impacto','Infância','Diferencial','Autorregulação'
-		    ];
-		    const lines = labels.map((lab,i)=>
-		      `${lab}: ${Math.round(lastScores[i]/maxScores[i]*100)}%`
-		    );
-		    const msg = encodeURIComponent(`Nome: ${name}\nData: ${date}\n${lines.join('\n')}`);
-		    window.open(`https://wa.me/5535984640729?text=${msg}`, '_blank');
+		document.getElementById('send').addEventListener('click', () => {
+		  if (!lastScores.length) {
+		    return alert('Por favor, corrija antes de enviar.');
+		  }
+		
+		  const name = document.getElementById('name').value.trim() || 'Paciente';
+		  const date = document.getElementById('date').value || new Date().toLocaleDateString();
+		  const labels = [
+		    'Desatenção',
+		    'Hiper/Impulso',
+		    'Desregulação',
+		    'Executiva',
+		    'Impacto',
+		    'Infância',
+		    'Diferencial',
+		    'Autorregulação'
+		  ];
+		
+		  // monta linhas com % e nível (Leve/Moderado/Grave)
+		  const lines = labels.map((lab, i) => {
+		    const pct = Math.round(lastScores[i] / maxScores[i] * 100);
+		    const [, nivel] = severity(pct);
+		    return `${lab}: ${pct}% (${nivel})`;
 		  });
+		
+		  // adiciona também o resumo clínico já exibido
+		  const resumo = document.getElementById('summary').innerText;
+		
+		  const msg = encodeURIComponent(
+		    `Nome: ${name}\n` +
+		    `Data: ${date}\n\n` +
+		    lines.join('\n') + '\n\n' +
+		    resumo
+		  );
+		
+		  window.open(`https://wa.me/5535984640729?text=${msg}`, '_blank');
+		});
 		
 		  // Dark Mode
 		  document.getElementById('darkModeToggle').addEventListener('click', () =>
