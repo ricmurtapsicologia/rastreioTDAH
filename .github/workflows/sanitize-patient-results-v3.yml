@@ -1,0 +1,43 @@
+name: Sanitize TDAH patient results v3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sanitize-patient-results-v3.yml'
+      - 'scripts/sanitize_patient_results.py'
+
+permissions:
+  contents: write
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply guarded source sanitization
+        run: python3 scripts/sanitize_patient_results.py
+      - name: Static clinical guard
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          for token in ('Regra DSM-like', 'Risco dimensional baixo', 'Indicação dimensional grave', 'id="results"', 'thermometer-fill'):
+              assert token not in s
+          assert 'Concluir rastreio' in s
+          assert 'últimos 6 meses' in s
+          assert 'screening-uniformity-v1.js' in s
+          PY
+      - name: Commit sanitized source
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'No sanitization needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Remove interpretação DSM-like do fluxo do paciente'
+          git push
