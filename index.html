@@ -5,23 +5,23 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EIR-TDAH-A – Escala Integrada de Rastreio para TDAH</title>
-  <meta name="description" content="EIR-TDAH-A: Escala Integrada de Rastreio clínica para TDAH baseada em DSM-5-TR e CID-11.">
+  <title>Atenção, organização e impulsividade no dia a dia</title>
+  <meta name="description" content="Rastreio clínico sobre atenção, organização, impulsividade e impacto funcional no dia a dia.">
   <link rel="canonical" href="https://ricmurtapsicologia.github.io/rastreioTDAH/">
   <link rel="icon" href="https://i.pinimg.com/736x/ea/e6/9b/eae69b98b402095e5acd1a817bb6e1ad.jpg" type="image/jpeg">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="EIR-TDAH-A">
-  <meta property="og:title" content="EIR-TDAH-A – Escala Integrada de Rastreio para TDAH">
-  <meta property="og:description" content="EIR-TDAH-A: Escala Integrada de Rastreio clínica para TDAH baseada em DSM-5-TR e CID-11.">
+  <meta property="og:site_name" content="Plataforma Terapêutica Richelmy Murta">
+  <meta property="og:title" content="Atenção, organização e impulsividade no dia a dia">
+  <meta property="og:description" content="Rastreio clínico sobre atenção, organização, impulsividade e impacto funcional no dia a dia.">
   <meta property="og:url" content="https://ricmurtapsicologia.github.io/rastreioTDAH/">
   <meta property="og:image" content="https://i.pinimg.com/736x/57/56/e0/5756e082e6578f470c72d23a323ed61e.jpg">
-  <meta property="og:image:alt" content="Banner EIR-TDAH-A – Escala Integrada de Rastreio para TDAH">
+  <meta property="og:image:alt" content="Imagem de apoio ao rastreio clínico">
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="EIR-TDAH-A – Escala Integrada de Rastreio para TDAH">
-  <meta name="twitter:description" content="EIR-TDAH-A: Escala Integrada de Rastreio clínica para TDAH baseada em DSM-5-TR e CID-11.">
+  <meta name="twitter:title" content="Atenção, organização e impulsividade no dia a dia">
+  <meta name="twitter:description" content="Rastreio clínico sobre atenção, organização, impulsividade e impacto funcional no dia a dia.">
   <meta name="twitter:image" content="https://i.pinimg.com/736x/57/56/e0/5756e082e6578f470c72d23a323ed61e.jpg">
 <!-- CSS -->
   <style>
@@ -89,14 +89,6 @@
       padding:.75rem 2rem; cursor:pointer; transition: transform .2s;
     }
     .actions button:hover{ transform: scale(1.05); }
-
-    /* Cards */
-    .cards{ display:grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: var(--gap); margin-bottom: var(--gap); }
-    .card{ background: var(--text-light); padding: var(--gap); border-radius: var(--radius); text-align:center; box-shadow:0 2px 4px rgba(0,0,0,.1); }
-    body.dark .card{ background:#222; color: var(--text-light); }
-    .thermometer{ position:relative; width:30px; height:140px; background:#eee; border-radius:15px; margin:0 auto .5rem; overflow:hidden; }
-    .thermometer-fill{ position:absolute; bottom:0; width:100%; height:0; background: var(--accent); transition: height 1s; }
-    .thermometer-text{ font-size:.85rem; }
 footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(--text); }
   </style>
   <link rel="stylesheet" href="https://ricmurtapsicologia.github.io/plataforma.terapeutica/assets/css/screening-uniformity-v1.css?v=1.0.0">
@@ -105,15 +97,15 @@ footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(-
   <!-- Dark Mode -->
   <header><button id="darkModeToggle" aria-label="Alternar modo noturno">🌙</button></header>
 <!-- Banner -->
-  <section class="hero" aria-label="Banner EIR-TDAH-A">
-    <img src="https://i.pinimg.com/736x/57/56/e0/5756e082e6578f470c72d23a323ed61e.jpg" alt="Banner EIR-TDAH-A – Escala Integrada de Rastreio para TDAH">
+  <section class="hero" aria-label="Imagem de apoio ao rastreio">
+    <img src="https://i.pinimg.com/736x/57/56/e0/5756e082e6578f470c72d23a323ed61e.jpg" alt="Imagem de apoio ao rastreio de atenção e organização">
   </section>
 
   <!-- Conteúdo -->
   <main id="mainContent" class="container show">
     <section class="intro">
       <h2>Saudações!</h2>
-      <p>Este formulário de autorrelato avalia sintomas de TDAH em adultos, baseado em critérios do DSM-5-TR e CID-11. Leia cada afirmação e selecione a resposta que melhor descreve sua experiência nos últimos 6 meses.</p>
+      <p>Leia cada afirmação e selecione a resposta que melhor descreve sua experiência real nos últimos 6 meses. Não há respostas certas ou erradas; o conjunto será analisado clinicamente pelo psicólogo responsável.</p>
     </section>
 
     <form id="form">
@@ -131,34 +123,17 @@ footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(-
       </div>
 
       <!-- Blocos -->
-      <section class="block" id="block1"><h3>1. Desatenção Atual</h3><div id="q1"></div></section>
-      <section class="block" id="block2"><h3>2. Hiperatividade e Impulsividade</h3><div id="q2"></div></section>
-      <section class="block" id="block3"><h3>3. Desregulação Emocional</h3><div id="q3"></div></section>
-      <section class="block" id="block4"><h3>4. Funções Executivas</h3><div id="q4"></div></section>
-      <section class="block" id="block5"><h3>5. Impacto Funcional</h3><div id="q5"></div></section>
-      <section class="block" id="block6"><h3>6. Retroatividade Infantil</h3><div id="q6"></div></section>
-      <section class="block" id="block7"><h3>7. Diagnóstico Diferencial</h3><div id="q7"></div></section>
-      <section class="block" id="block8"><h3>8. Autorregulação e Comportamentos Gerais</h3><div id="q8"></div></section>
+      <section class="block" id="block1"><h3>Bloco 1</h3><div id="q1"></div></section>
+      <section class="block" id="block2"><h3>Bloco 2</h3><div id="q2"></div></section>
+      <section class="block" id="block3"><h3>Bloco 3</h3><div id="q3"></div></section>
+      <section class="block" id="block4"><h3>Bloco 4</h3><div id="q4"></div></section>
+      <section class="block" id="block5"><h3>Bloco 5</h3><div id="q5"></div></section>
+      <section class="block" id="block6"><h3>Bloco 6</h3><div id="q6"></div></section>
+      <section class="block" id="block7"><h3>Bloco 7</h3><div id="q7"></div></section>
+      <section class="block" id="block8"><h3>Bloco 8</h3><div id="q8"></div></section>
 
-      <div class="actions"><button type="button" id="submit">Corrigir</button></div>
+      <div class="actions"><button type="button" id="submit">Concluir rastreio</button></div>
     </form>
-
-    <!-- Resultados -->
-    <section id="results" style="display:none;">
-      <h2>Resultados</h2>
-      <div id="summary" role="alert"></div>
-
-      <div class="cards">
-        <div class="card"><h4>Desatenção</h4><div class="thermometer"><div id="f1" class="thermometer-fill"></div></div><div id="t1" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Hiper/Impulso</h4><div class="thermometer"><div id="f2" class="thermometer-fill"></div></div><div id="t2" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Desregulação</h4><div class="thermometer"><div id="f3" class="thermometer-fill"></div></div><div id="t3" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Executiva</h4><div class="thermometer"><div id="f4" class="thermometer-fill"></div></div><div id="t4" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Impacto</h4><div class="thermometer"><div id="f5" class="thermometer-fill"></div></div><div id="t5" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Infância</h4><div class="thermometer"><div id="f6" class="thermometer-fill"></div></div><div id="t6" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Diferencial (protetor)</h4><div class="thermometer"><div id="f7" class="thermometer-fill"></div></div><div id="t7" class="thermometer-text">0%</div></div>
-        <div class="card"><h4>Autorregulação (protetor)</h4><div class="thermometer"><div id="f8" class="thermometer-fill"></div></div><div id="t8" class="thermometer-text">0%</div></div>
-      </div>
-</section>
   </main>
 
   <footer>© 2026 Richelmy Murta — Psicólogo Clínico</footer>
@@ -272,11 +247,6 @@ footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(-
       ]
     };
 
-    /* máximos (cada item 0–4) */
-    const maxScores = [48,48,40,48,32,40,40,44];
-    let lastScores = [];
-
-    /* Renderização */
     const renderQuestions = () => {
       Object.entries(questions).forEach(([key, arr]) => {
         const container = document.getElementById(key);
@@ -290,103 +260,8 @@ footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(-
       });
     };
 
-    /* Severidade textual */
-    const severity = pct => pct < 34 ? ['green','Leve'] : pct < 67 ? ['orange','Moderado'] : ['red','Grave'];
-
-    /* ---------- DSM-like ---------- */
-    // mapeamento de 9 itens representativos por domínio DSM
-    const DSM_INATT = [0,1,2,5,6,7,9,10,11];   // 9 de Desatenção
-    const DSM_HIIMP = [0,1,3,4,5,6,7,9,11];   // 9 de Hiper/Impulso
-    const SYM_TH = 3; // 0–4; 3/4 ~ “frequente”
-
-    function dsmCount(){
-      const cnt = (blockKey, idxs) => idxs.reduce((acc,i)=>{
-        const v = +document.querySelector(`input[name="${blockKey}_${i}"]:checked`).value;
-        return acc + (v >= SYM_TH ? 1 : 0);
-      },0);
-
-      const inatt = cnt('q1', DSM_INATT);
-      const hiimp = cnt('q2', DSM_HIIMP);
-
-      // início <12 anos: média bloco 6
-      const childhoodMean =
-        questions.q6.reduce((s,_,i)=> s + (+document.querySelector(`input[name="q6_${i}"]:checked`).value), 0) / questions.q6.length;
-      const onsetBefore12 = childhoodMean >= 2;
-
-      // prejuízo: média bloco 5
-      const impactMean =
-        questions.q5.reduce((s,_,i)=> s + (+document.querySelector(`input[name="q5_${i}"]:checked`).value), 0) / questions.q5.length;
-      const impairment = impactMean >= 2;
-
-      const meetsSymptom = (inatt >= 5) || (hiimp >= 5);
-      const meetsDSM = meetsSymptom && onsetBefore12 && impairment;
-
-      return { inatt, hiimp, onsetBefore12, impairment, meetsSymptom, meetsDSM };
-    }
-
-    /* ---------- App ---------- */
     document.addEventListener('DOMContentLoaded', () => {
-      // Splash → conteúdo
-      setTimeout(() => {
-        document.getElementById('splash')?.classList.add('hidden');
-        document.getElementById('mainContent')?.classList.add('show');
-      }, 2000);
-
       renderQuestions();
-
-      // Corrigir
-      document.getElementById('submit').addEventListener('click', () => {
-        const form = document.getElementById('form');
-
-        // destacar não respondidas
-        document.querySelectorAll('.question').forEach(q => {
-          q.classList.toggle('unanswered', !q.querySelector('input:checked'));
-        });
-        const pending = document.querySelector('.question.unanswered');
-        if (pending) {
-          pending.scrollIntoView({ behavior:'smooth', block:'center' });
-          return alert('Por favor, responda todas as questões faltantes (destacadas em vermelho).');
-        }
-        if (!form.checkValidity()) { return alert('Por favor, responda todas as questões.'); }
-
-        // Soma dimensional (invertendo Bloco 7 e 8 como “protetores”)
-        lastScores = Object.keys(questions).map((k, idx) =>
-          questions[k].reduce((sum, _, j) => {
-            const val = +document.querySelector(`input[name="${k}_${j}"]:checked`).value;
-            return sum + ((idx===6 || idx===7) ? (4 - val) : val); // 7 e 8 invertidos
-          }, 0)
-        );
-
-        // Termômetros por domínio
-        lastScores.forEach((s,i) => {
-          const pct = Math.round(s / maxScores[i] * 100);
-          const [col,text] = severity(pct);
-          document.getElementById(`f${i+1}`).style.cssText = `height:${pct}%; background:${col}`;
-          document.getElementById(`t${i+1}`).innerText = `${pct}% (${text})`;
-        });
-
-        // Total dimensional (rótulos de rastreio)
-        const total = lastScores.reduce((a,b)=>a+b, 0);
-        let dim = total < 99 ? 'Risco dimensional baixo.' :
-                  total < 149 ? 'Zona de atenção dimensional.' :
-                  total < 218 ? 'Indicação dimensional significativa.' :
-                                'Indicação dimensional grave.';
-
-        // Checagem DSM-like
-        const dsm = dsmCount();
-        let dsmLine = `Regra DSM-like: Inat=${dsm.inatt}/9, H/I=${dsm.hiimp}/9; `;
-        dsmLine += dsm.onsetBefore12 ? 'início <12a: SIM; ' : 'início <12a: NÃO; ';
-        dsmLine += dsm.impairment ? 'prejuízo: SIM. ' : 'prejuízo: NÃO. ';
-        dsmLine += dsm.meetsDSM
-          ? '\n*Triagem compatível com critérios DSM; recomenda-se avaliação clínica.*'
-          : '\n*Triagem não compatível com critérios DSM completos.*';
-
-        document.getElementById('summary').innerText =
-          `Total: ${total} pts. ${dim}\n${dsmLine}`;
-
-        document.getElementById('results').style.display = 'block';
-      });
-// Dark mode
       document.getElementById('darkModeToggle').addEventListener('click', () =>
         document.body.classList.toggle('dark')
       );
