@@ -23,9 +23,7 @@
   <meta name="twitter:title" content="EIR-TDAH-A – Escala Integrada de Rastreio para TDAH">
   <meta name="twitter:description" content="EIR-TDAH-A: Escala Integrada de Rastreio clínica para TDAH baseada em DSM-5-TR e CID-11.">
   <meta name="twitter:image" content="https://i.pinimg.com/736x/57/56/e0/5756e082e6578f470c72d23a323ed61e.jpg">
-  <!-- FontAwesome (ícone WhatsApp) -->
-  <script src="https://kit.fontawesome.com/2b444a9f1f.js" crossorigin="anonymous"></script>
-  <!-- CSS -->
+<!-- CSS -->
   <style>
     :root {
       --light-bg: #f4f4f9;
@@ -34,7 +32,6 @@
       --accent:   #c8a165;
       --text:     #333;
       --text-light: #fff;
-      --whatsapp: #25D366;
       --error-bg:    #ffebeb;
       --error-border:#ff4d4f;
       --gap:        1rem;
@@ -100,12 +97,7 @@
     .thermometer{ position:relative; width:30px; height:140px; background:#eee; border-radius:15px; margin:0 auto .5rem; overflow:hidden; }
     .thermometer-fill{ position:absolute; bottom:0; width:100%; height:0; background: var(--accent); transition: height 1s; }
     .thermometer-text{ font-size:.85rem; }
-
-    /* WhatsApp */
-    .send-whatsapp{ display:inline-flex; align-items:center; gap:.5rem; background:var(--whatsapp); color:#fff; padding:.75rem 1.5rem; border:none; border-radius: var(--radius); cursor:pointer; transition: transform .2s; }
-    .send-whatsapp:hover{ transform: scale(1.05); }
-
-    footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(--text); }
+footer{ text-align:center; padding: var(--gap) 0; font-size:.85rem; color: var(--text); }
   </style>
   <link rel="stylesheet" href="https://ricmurtapsicologia.github.io/plataforma.terapeutica/assets/css/screening-uniformity-v1.css?v=1.0.0">
 </head>
@@ -162,11 +154,7 @@
         <div class="card"><h4>Diferencial (protetor)</h4><div class="thermometer"><div id="f7" class="thermometer-fill"></div></div><div id="t7" class="thermometer-text">0%</div></div>
         <div class="card"><h4>Autorregulação (protetor)</h4><div class="thermometer"><div id="f8" class="thermometer-fill"></div></div><div id="t8" class="thermometer-text">0%</div></div>
       </div>
-
-      <div style="text-align:center;">
-        <button class="send-whatsapp" id="send"><i class="fab fa-whatsapp"></i> Enviar Resultado ao Psicólogo</button>
-      </div>
-    </section>
+</section>
   </main>
 
   <footer>© 2026 Richelmy Murta — Psicólogo Clínico</footer>
@@ -394,36 +382,7 @@
 
         document.getElementById('results').style.display = 'block';
       });
-
-      // Enviar ao Psicólogo (WhatsApp)
-      document.getElementById('send').addEventListener('click', () => {
-        if (!lastScores.length) { return alert('Por favor, corrija antes de enviar.'); }
-
-        const name = document.getElementById('name').value.trim() || 'Paciente';
-        const date = document.getElementById('date').value || new Date().toLocaleDateString();
-        const labels = [
-          'Desatenção','Hiper/Impulso','Desregulação','Executiva',
-          'Impacto','Infância','Diferencial (protetor)','Autorregulação (protetor)'
-        ];
-
-        const lines = labels.map((lab, i) => {
-          const pct = Math.round(lastScores[i] / maxScores[i] * 100);
-          const [, nivel] = severity(pct);
-          return `${lab}: ${pct}% (${nivel})`;
-        });
-
-        const resumo = document.getElementById('summary').innerText;
-
-        const msg = encodeURIComponent(
-          `Nome: ${name}\n` +
-          `Data: ${date}\n\n` +
-          lines.join('\n') + '\n\n' + resumo
-        );
-
-        window.open(`https://wa.me/5535984640729?text=${msg}`, '_blank');
-      });
-
-      // Dark mode
+// Dark mode
       document.getElementById('darkModeToggle').addEventListener('click', () =>
         document.body.classList.toggle('dark')
       );
