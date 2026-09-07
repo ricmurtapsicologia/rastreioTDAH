@@ -1,0 +1,44 @@
+name: Remover WhatsApp de resultados v2
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/remove-whatsapp-v2.yml']
+permissions:
+  contents: write
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove patient result sharing only
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html'); s=p.read_text(encoding='utf-8'); before=s
+          s=re.sub(r'\s*<!--\s*FontAwesome \(ícone WhatsApp\)\s*-->\s*<script[^>]*fontawesome[^>]*></script>\s*','\n',s,count=1,flags=re.I)
+          s=re.sub(r'\s*--whatsapp:\s*#[0-9A-Fa-f]+;','',s,count=1)
+          s=re.sub(r'\s*/\*\s*WhatsApp\s*\*/\s*\.send-whatsapp\s*\{.*?\}\s*\.send-whatsapp:hover\s*\{.*?\}\s*','\n',s,count=1,flags=re.S|re.I)
+          s=re.sub(r'\s*<div\s+style=["\']text-align:center;["\']>\s*<button[^>]*class=["\']send-whatsapp["\'][^>]*id=["\']send["\'][^>]*>.*?</button>\s*</div>\s*','\n',s,count=1,flags=re.S|re.I)
+          s=re.sub(r"\s*//\s*Enviar ao Psicólogo \(WhatsApp\)\s*document\.getElementById\(['\"]send['\"]\)\.addEventListener\(['\"]click['\"],\s*\(\)\s*=>\s*\{.*?window\.open\(`https://wa\.me/.*?\);\s*\}\);\s*",'\n',s,count=1,flags=re.S|re.I)
+          if s==before: raise SystemExit('NO_WHATSAPP_CHANGE')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Contract check
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          if re.search(r'wa\.me|send-whatsapp|id=["\']send["\']|whatsapp',s,re.I): raise SystemExit('WHATSAPP_RESIDUE')
+          if 'id="block8"' not in s or 'id="submit"' not in s: raise SystemExit('QUESTIONNAIRE_CHANGED')
+          PY
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Remove compartilhamento de resultados por WhatsApp'
+          git push
