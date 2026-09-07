@@ -59,16 +59,7 @@
       color: var(--text); transition: color var(--transition); z-index: 1001;
     }
     body.dark #darkModeToggle{ color: var(--text-light); }
-
-    /* Splash */
-    #splash{
-      position: fixed; inset: 0; background: var(--accent); color: var(--text-light);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap: var(--gap); text-align:center; z-index:1000; transition: opacity .4s, visibility .4s;
-    }
-    #splash.hidden{ opacity:0; visibility:hidden; }
-
-    /* Hero */
+/* Hero */
     .hero{ width:100%; max-height:400px; aspect-ratio:16/9; overflow:hidden; margin: var(--gap) 0; border-radius: var(--radius); }
     .hero img{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
@@ -121,20 +112,13 @@
 <body>
   <!-- Dark Mode -->
   <header><button id="darkModeToggle" aria-label="Alternar modo noturno">🌙</button></header>
-
-  <!-- Splash -->
-  <div id="splash">
-    <h2>Bem-vindo ao EIR-TDAH-A</h2>
-    <p>Carregando avaliação...</p>
-  </div>
-
-  <!-- Banner -->
+<!-- Banner -->
   <section class="hero" aria-label="Banner EIR-TDAH-A">
     <img src="https://i.pinimg.com/736x/57/56/e0/5756e082e6578f470c72d23a323ed61e.jpg" alt="Banner EIR-TDAH-A – Escala Integrada de Rastreio para TDAH">
   </section>
 
   <!-- Conteúdo -->
-  <main id="mainContent" class="container">
+  <main id="mainContent" class="container show">
     <section class="intro">
       <h2>Saudações!</h2>
       <p>Este formulário de autorrelato avalia sintomas de TDAH em adultos, baseado em critérios do DSM-5-TR e CID-11. Leia cada afirmação e selecione a resposta que melhor descreve sua experiência nos últimos 6 meses.</p>
